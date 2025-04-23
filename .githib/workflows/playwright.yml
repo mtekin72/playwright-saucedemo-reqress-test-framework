@@ -1,0 +1,66 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: 'npm' # Cache dependencies for faster runs
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}
+          restore-keys: |
+            playwright-${{ runner.os }}
+
+  ui-tests:
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore Playwright Dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright UI tests
+        run: npx playwright test --project="UI Tests"
+      - name: Upload UI Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-ui-report
+          path: playwright-report/
+          retention-days: 30
+
+  api-tests:
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore Playwright Dependencies
+        run: npm ci
+      - name: Run Playwright API tests
+        run: npx playwright test --project="API Tests"
+      - name: Upload API Playwright Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-api-report
+          path: playwright-report/
+          retention-days: 30

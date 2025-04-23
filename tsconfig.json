@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@helpers/*": ["helpers/*"],
+        "@fixtures/*": ["fixtures/*"],
+        "@pages/*":["tests/UI/pages/*"],
+      },
+      "esModuleInterop": true
+    }
+  }
