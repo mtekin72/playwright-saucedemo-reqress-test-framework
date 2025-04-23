@@ -1,50 +1,63 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig } from '@playwright/test';
 
-/**
- * See https://playwright.dev/docs/test-configuration
- */
 export default defineConfig({
-  tsconfig: "./tsconfig.json",
-  testDir: "./tests",
+  // TypeScript config path
+  tsconfig: './tsconfig.json',
 
+  // Directory containing your tests
+  testDir: './tests',
+
+  // Run tests in parallel
   fullyParallel: true,
+
+  // Forbid 'test.only' in CI
   forbidOnly: !!process.env.CI,
+
+  // Retry tests on CI if they fail
   retries: process.env.CI ? 2 : 0,
+
+  // Limit to 1 worker on CI
   workers: process.env.CI ? 1 : undefined,
 
-  reporter: "html",
+  // Generate HTML report
+  reporter: 'html',
 
-  // Global settings shared by all projects
+  // Shared configuration
   use: {
     headless: true,
-    trace: "on-first-retry",
-    screenshot: "only-on-failure",
-    video: "retain-on-failure",
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
 
+  // Define named projects
   projects: [
     {
-      name: "UI Tests",
-      testDir: "./tests/UI",
-      testMatch: "**/*.spec.ts", // Adjust as needed for your naming
+      name: 'UI Tests',
+      testDir: './tests/UI',
       use: {
-        ...devices["Desktop Chrome"],
-        baseURL: "https://www.saucedemo.com/",
+        baseURL: 'https://www.saucedemo.com/',
       },
     },
     {
-      name: "API Tests",
-      testDir: "./tests/API",
-      testMatch: "**/*.api.ts", // Adjust to only match API test files
+      name: 'API Tests',
+      testDir: './tests/API',
       use: {
-        baseURL: "https://reqres.in/",
-        // Optional: add headers for auth, etc.
-        // extraHTTPHeaders: {
-        //   Authorization: `Bearer ${process.env.API_TOKEN}`,
-        // },
+        baseURL: 'https://reqres.in/',
+        // You can add additional headers or setup here if needed
+        // extraHTTPHeaders: { Authorization: 'Bearer YOUR_TOKEN' }
       },
     },
   ],
+
+  // Optional: Start your web app before tests (if testing a local app)
+  // webServer: {
+  //   command: 'npm run start',
+  //   url: 'http://127.0.0.1:3000',
+  //   reuseExistingServer: !process.env.CI,
+  // },
+});
+
 
   // Optional: Uncomment to run local dev server for UI tests
   // webServer: {
