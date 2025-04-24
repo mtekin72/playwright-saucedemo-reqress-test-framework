@@ -4,8 +4,13 @@
     "paths": {
       "@helpers/*": ["helpers/*"],
       "@fixtures/*": ["fixtures/*"],
-      "@pages/*":["tests/UI/pages/*"],
+      "@pages/*": ["tests/UI/pages/*"]
     },
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,  // Option to avoid unnecessary type checking of libraries
+    "strict": true,        // Enable strict mode for better type safety
+    "target": "ES6",       // Set target to ES6 for compatibility with Playwright
+    "module": "ESNext",    // Use ESNext module system
+    "moduleResolution": "node"  // To make sure TypeScript can resolve modules like Node.js
   }
 }
