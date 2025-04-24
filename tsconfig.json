@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": ".",                // Allow root-based imports
     "paths": {
-      "@helpers/*": ["helpers/*"],
-      "@fixtures/*": ["fixtures/*"],
-      "@pages/*": ["tests/UI/pages/*"]
+      "@helpers/*": ["helpers/*"], // Helper files
+      "@fixtures/*": ["fixtures/*"], // Fixture files
+      "@pages/*": ["tests/UI/pages/*"] // Page Objects
     },
     "esModuleInterop": true,
-    "skipLibCheck": true,  // Option to avoid unnecessary type checking of libraries
-    "strict": true,        // Enable strict mode for better type safety
-    "target": "ES6",       // Set target to ES6 for compatibility with Playwright
-    "module": "ESNext",    // Use ESNext module system
-    "moduleResolution": "node"  // To make sure TypeScript can resolve modules like Node.js
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES6",
+    "module": "ESNext",
+    "moduleResolution": "node"
   }
 }
