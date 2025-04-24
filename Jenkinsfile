@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools {
+    nodejs 'NodeJS_18' // ⬅️ This is what activates it
+  }
+
   environment {
     PLAYWRIGHT_PROJECT_UI = 'UI Tests'
     PLAYWRIGHT_PROJECT_API = 'API Tests'
