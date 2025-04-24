@@ -45,12 +45,16 @@ pipeline {
 
         stage('Generate Report') {
             steps {
-                sh 'npx playwright show-report'
+                echo 'Generating Playwright report...'
+                // Generate the report files, not start a server
+                sh 'npx playwright show-report --output=playwright-report'
             }
         }
 
         stage('Archive Report') {
             steps {
+                echo 'Archiving Playwright report...'
+                // Archive the report folder as Jenkins artifacts
                 archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
             }
         }
