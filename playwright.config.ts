@@ -1,31 +1,24 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  timeout: 30000,
-  retries: 0,
-  use: {
-    baseURL: process.env.BASE_URL || 'https://www.saucedemo.com/',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-  },
-
   projects: [
     {
       name: 'UI Tests',
-      testMatch: /.*\.ui\.spec\.ts/,
+      testDir: './tests/UI', // Path to UI tests
       use: {
-        ...devices['Desktop Chrome'],
+        baseURL: 'https://www.saucedemo.com/',
+        browserName: 'chromium',
+        headless: true,
       },
     },
     {
       name: 'API Tests',
-      testMatch: /.*\.api\.spec\.ts/,
+      testDir: './tests/API', // Path to API tests
       use: {
-        ...devices['Desktop Chrome'],
+        baseURL: 'https://reqres.in/',
+        browserName: 'chromium',
+        headless: true,
       },
     },
   ],
-
-  reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }]],
 });
