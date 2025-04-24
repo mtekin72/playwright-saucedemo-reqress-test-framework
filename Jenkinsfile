@@ -2,7 +2,11 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'Node18'  // Make sure this matches the tool name in Jenkins
+        nodejs 'Node18'  // Ensure this matches the NodeJS tool name in Jenkins
+    }
+
+    parameters {
+        choice(name: 'TEST_TYPE', choices: ['UI', 'API', 'Both'], description: 'Select the type of tests to run')
     }
 
     environment {
@@ -20,6 +24,9 @@ pipeline {
         }
 
         stage('Run UI Tests') {
+            when {
+                expression { return params.TEST_TYPE == 'UI' || params.TEST_TYPE == 'Both' }
+            }
             steps {
                 echo 'Running UI Tests...'
                 sh "npx playwright test --project='${PLAYWRIGHT_PROJECT_UI}' --config=${PLAYWRIGHT_CONFIG}"
@@ -27,6 +34,9 @@ pipeline {
         }
 
         stage('Run API Tests') {
+            when {
+                expression { return params.TEST_TYPE == 'API' || params.TEST_TYPE == 'Both' }
+            }
             steps {
                 echo 'Running API Tests...'
                 sh "npx playwright test --project='${PLAYWRIGHT_PROJECT_API}' --config=${PLAYWRIGHT_CONFIG}"
