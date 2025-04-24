@@ -65,7 +65,7 @@ export default defineConfig({
   //   url: "http://localhost:3000",
   //   reuseExistingServer: !process.env.CI,
   // },
-});
+
 
 
 // import { defineConfig } from "@playwright/test";
