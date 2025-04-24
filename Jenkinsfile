@@ -1,57 +1,57 @@
 pipeline {
-  agent any
+    agent any
 
-  tools {
-    nodejs 'NodeJS_18' // ⬅️ This is what activates it
-  }
-
-  environment {
-    PLAYWRIGHT_PROJECT_UI = 'UI Tests'
-    PLAYWRIGHT_PROJECT_API = 'API Tests'
-    PLAYWRIGHT_CONFIG = 'playwright.config.ts'
-  }
-
-  stages {
-    stage('Install Dependencies') {
-      steps {
-        echo 'Installing dependencies...'
-        sh 'npm ci'
-      }
+    tools {
+        nodejs 'Node18'  // Make sure this matches the tool name in Jenkins
     }
 
-    stage('Run UI Tests') {
-      steps {
-        echo 'Running UI Tests...'
-        sh "npx playwright test --project='${PLAYWRIGHT_PROJECT_UI}' --config=${PLAYWRIGHT_CONFIG}"
-      }
+    environment {
+        PLAYWRIGHT_PROJECT_UI = 'UI Tests'
+        PLAYWRIGHT_PROJECT_API = 'API Tests'
+        PLAYWRIGHT_CONFIG = 'playwright.config.ts'
     }
 
-    stage('Run API Tests') {
-      steps {
-        echo 'Running API Tests...'
-        sh "npx playwright test --project='${PLAYWRIGHT_PROJECT_API}' --config=${PLAYWRIGHT_CONFIG}"
-      }
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                echo 'Installing dependencies...'
+                sh 'npm ci'
+            }
+        }
+
+        stage('Run UI Tests') {
+            steps {
+                echo 'Running UI Tests...'
+                sh "npx playwright test --project='${PLAYWRIGHT_PROJECT_UI}' --config=${PLAYWRIGHT_CONFIG}"
+            }
+        }
+
+        stage('Run API Tests') {
+            steps {
+                echo 'Running API Tests...'
+                sh "npx playwright test --project='${PLAYWRIGHT_PROJECT_API}' --config=${PLAYWRIGHT_CONFIG}"
+            }
+        }
+
+        stage('Generate Report') {
+            steps {
+                sh 'npx playwright show-report'
+            }
+        }
+
+        stage('Archive Report') {
+            steps {
+                archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+            }
+        }
     }
 
-    stage('Generate Report') {
-      steps {
-        sh 'npx playwright show-report'
-      }
+    post {
+        always {
+            echo 'Pipeline completed!'
+        }
+        failure {
+            echo 'Test run failed!'
+        }
     }
-
-    stage('Archive Report') {
-      steps {
-        archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
-      }
-    }
-  }
-
-  post {
-    always {
-      echo 'Pipeline completed!'
-    }
-    failure {
-      echo 'Test run failed!'
-    }
-  }
 }
