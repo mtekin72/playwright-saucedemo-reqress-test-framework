@@ -2,11 +2,11 @@
   "name": "playwright-saucedemo",
  "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "playwright test",
-    "test:UI": "npx playwright test --project='UI Tests'",
-    "test:API": "npx playwright test --project='API Tests'"
-  },
+"scripts": {
+  "test": "playwright test",
+  "test:UI": "npx playwright test --project=\"UI Tests\"",
+  "test:API": "npx playwright test --project=\"API Tests\""
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
