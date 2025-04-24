@@ -43,18 +43,10 @@ pipeline {
             }
         }
 
-        stage('Generate Report') {
-            steps {
-                echo 'Generating Playwright report...'
-                // Generate the report files (no --output flag)
-                sh 'npx playwright show-report'
-            }
-        }
-
         stage('Archive Report') {
             steps {
                 echo 'Archiving Playwright report...'
-                // Archive the report folder as Jenkins artifacts
+                // Archive the generated Playwright report folder as Jenkins artifacts
                 archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
             }
         }
