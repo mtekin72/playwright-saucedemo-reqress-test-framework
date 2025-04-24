@@ -1,28 +1,29 @@
-// playwright.config.ts
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests', // Make sure this is the correct folder where your tests are
-  timeout: 30 * 1000,
+  timeout: 30000,
   retries: 0,
   use: {
-    baseURL: 'https://www.saucedemo.com',
-    headless: true,
-    viewport: { width: 1280, height: 720 },
-    actionTimeout: 0,
-    ignoreHTTPSErrors: true,
-    video: 'retain-on-failure',
+    baseURL: process.env.BASE_URL || 'https://www.saucedemo.com/',
+    trace: 'on-first-retry',
     screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
 
   projects: [
     {
       name: 'UI Tests',
       testMatch: /.*\.ui\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
     },
     {
       name: 'API Tests',
       testMatch: /.*\.api\.spec\.ts/,
+      use: {
+        ...devices['Desktop Chrome'],
+      },
     },
   ],
 
