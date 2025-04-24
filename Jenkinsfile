@@ -10,8 +10,8 @@ pipeline {
   }
 
   environment {
-    API_BASE_URL = 'https://reqres.in/'  // API Base URL
-    UI_BASE_URL = 'https://www.saucedemo.com/'  // UI Base URL
+    API_BASE_URL = 'https://reqres.in/'
+    UI_BASE_URL = 'https://www.saucedemo.com/'
   }
 
   stages {
@@ -24,30 +24,27 @@ pipeline {
 
     stage('Run Selected Playwright Tests') {
       steps {
-        echo "Running tests for project: ${params.PROJECT}"
-
-        // Set base URL based on selected project
         script {
-          if (params.PROJECT == 'UI Tests') {
-            env.BASE_URL = UI_BASE_URL
-          } else {
-            env.BASE_URL = API_BASE_URL
-          }
+          echo "Running tests for project: ${params.PROJECT}"
+
+          // Set BASE_URL based on selected project
+          env.BASE_URL = (params.PROJECT == 'UI Tests') ? UI_BASE_URL : API_BASE_URL
+
+          echo "Using base URL: ${env.BASE_URL}"
+
+          // Create report directory
+          sh 'mkdir -p playwright-report'
+
+          // Run Playwright tests with selected project
+          sh "npx playwright test --project='${params.PROJECT}' || true"
         }
-
-        echo "Using base URL: ${env.BASE_URL}"
-
-        // Running tests
-        sh 'mkdir -p playwright-report'
-        sh "npx playwright test --project='${params.PROJECT}' || true"
       }
     }
 
     stage('Generate HTML Report') {
       steps {
         echo 'Generating Playwright HTML report...'
-        // Corrected command to show report
-        sh 'npx playwright show-report'
+        sh 'npx playwright show-report || true'
       }
     }
   }
