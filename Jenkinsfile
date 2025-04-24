@@ -46,8 +46,8 @@ pipeline {
         stage('Generate Report') {
             steps {
                 echo 'Generating Playwright report...'
-                // Generate the report files, not start a server
-                sh 'npx playwright show-report --output=playwright-report'
+                // Generate the report files (no --output flag)
+                sh 'npx playwright show-report'
             }
         }
 
