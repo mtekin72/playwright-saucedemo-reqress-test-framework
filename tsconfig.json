@@ -1,35 +1,11 @@
-
-// {
-//   "compilerOptions": {
-//     "target": "ESNext",
-//     "module": "CommonJS",
-//     "moduleResolution": "Node",
-//     "lib": ["ESNext", "DOM"],
-//     "types": ["node", "playwright"],
-//     "esModuleInterop": true,
-//     "resolveJsonModule": true,
-//     "skipLibCheck": true,
-//     "strict": true,
-//     "baseUrl": ".",
-//     "paths": {
-//       "@helpers/*": ["helpers/*"],
-//       "@fixtures/*": ["fixtures/*"],
-//       "@pages/*": ["tests/UI/pages/*"]
-//     },
-//     "outDir": "dist"
-//   },
-//   "include": ["tests", "helpers", "fixtures", "playwright.config.ts"],
-//   "exclude": ["node_modules", "dist"]
-// }
-
 {
-    "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "@helpers/*": ["helpers/*"],
-        "@fixtures/*": ["fixtures/*"],
-        "@pages/*":["tests/UI/pages/*"],
-      },
-      "esModuleInterop": true
-    }
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@helpers/*": ["helpers/*"],
+      "@fixtures/*": ["fixtures/*"],
+      "@pages/*":["tests/UI/pages/*"],
+    },
+    "esModuleInterop": true
   }
+}

@@ -1,58 +1,77 @@
 pipeline {
-  agent any
-
-  tools {
-    nodejs 'Node18'
-  }
-
-  parameters {
-    choice(name: 'PROJECT', choices: ['UI Tests', 'API Tests'], description: 'Choose which project to run')
-  }
-
-  environment {
-    API_BASE_URL = 'https://reqres.in/'
-    UI_BASE_URL = 'https://www.saucedemo.com/'
-  }
-
-  stages {
-    stage('Install Dependencies') {
-      steps {
-        echo 'Installing Node dependencies using npm ci...'
-        sh 'npm ci'
-      }
+    agent any
+    
+    environment {
+        // Set the environment variables
+        PLAYWRIGHT_PROJECT_UI = 'UI Tests'
+        PLAYWRIGHT_PROJECT_API = 'API Tests'
+        PLAYWRIGHT_CONFIG = 'playwright.config.ts'
     }
-
-    stage('Run Selected Playwright Tests') {
-      steps {
-        script {
-          echo "Running tests for project: ${params.PROJECT}"
-
-          // Set BASE_URL based on selected project
-          env.BASE_URL = (params.PROJECT == 'UI Tests') ? UI_BASE_URL : API_BASE_URL
-
-          echo "Using base URL: ${env.BASE_URL}"
-
-          // Create report directory
-          sh 'mkdir -p playwright-report'
-
-          // Run Playwright tests with selected project
-          sh "npx playwright test --project='${params.PROJECT}' || true"
+    
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Install node dependencies
+                    echo 'Installing dependencies...'
+                    sh 'npm ci'
+                }
+            }
         }
-      }
-    }
 
-    stage('Generate HTML Report') {
-      steps {
-        echo 'Generating Playwright HTML report...'
-        sh 'npx playwright show-report || true'
-      }
-    }
-  }
+        stage('Run Playwright UI Tests') {
+            steps {
+                script {
+                    // Run Playwright UI tests
+                    echo 'Running UI Tests...'
+                    sh 'npx playwright test --project="$PLAYWRIGHT_PROJECT_UI" --config="$PLAYWRIGHT_CONFIG"'
+                }
+            }
+        }
 
-  post {
-    always {
-      echo 'Pipeline execution complete.'
-      archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+        stage('Run Playwright API Tests') {
+            steps {
+                script {
+                    // Run Playwright API tests
+                    echo 'Running API Tests...'
+                    sh 'npx playwright test --project="$PLAYWRIGHT_PROJECT_API" --config="$PLAYWRIGHT_CONFIG"'
+                }
+            }
+        }
+
+        stage('Generate Playwright Report') {
+            steps {
+                script {
+                    // Generate the HTML report after the tests
+                    echo 'Generating Playwright HTML report...'
+                    sh 'npx playwright show-report'
+                }
+            }
+        }
+
+        stage('Archive Playwright Report') {
+            steps {
+                script {
+                    // Archive Playwright report as a Jenkins artifact
+                    echo 'Archiving Playwright HTML report...'
+                    archiveArtifacts artifacts: 'playwright-report/**/*', allowEmptyArchive: true
+                }
+            }
+        }
     }
-  }
+    
+    post {
+        always {
+            // Clean up or notify if required
+            echo 'Pipeline execution complete.'
+        }
+        success {
+            // Notify success if needed
+            echo 'Tests ran successfully.'
+        }
+        failure {
+            // Notify failure if needed
+            echo 'Test run failed.'
+        }
+    }
 }
