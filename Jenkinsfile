@@ -24,7 +24,7 @@ pipeline {
                 script {
                     // Run Playwright UI tests
                     echo 'Running UI Tests...'
-                    sh 'npx playwright test --project="$PLAYWRIGHT_PROJECT_UI" --config="$PLAYWRIGHT_CONFIG"'
+                    sh "npx playwright test --project=${PLAYWRIGHT_PROJECT_UI} --config=${PLAYWRIGHT_CONFIG}"
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline {
                 script {
                     // Run Playwright API tests
                     echo 'Running API Tests...'
-                    sh 'npx playwright test --project="$PLAYWRIGHT_PROJECT_API" --config="$PLAYWRIGHT_CONFIG"'
+                    sh "npx playwright test --project=${PLAYWRIGHT_PROJECT_API} --config=${PLAYWRIGHT_CONFIG}"
                 }
             }
         }
